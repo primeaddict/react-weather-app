@@ -17,7 +17,6 @@ function App() {
         .then((result) => {
           setWeather(result);
           setQuery("");
-          console.log(result);
         })
         .catch((error) => {
           console.log(error);
@@ -35,8 +34,10 @@ function App() {
     dateBuilder();
   }, []);
 
+
+
   return (
-    <div className="app">
+    <div className="app warm">
       <main>
         <div className="search-box">
           <input
@@ -48,35 +49,54 @@ function App() {
             onKeyPress={search}
           />
         </div>
-        {typeof weather.main !== "undefined" ? (
-          <>
-            <div className="location-box">
-              <div className="location">
-                {weather.name}, {weather.sys.country}
+        {typeof weather.main !== "undefined" ?
+          (
+            <>
+              <div className="location-box">
+                <div className="location">
+                  {weather.name}, {weather.sys.country}
+                </div>
+                <div className="date">{date}</div>
               </div>
-              <div className="date">{date}</div>
+              <div className="weather-box">
+                <div className="temp">
+                  {Math.round(Number(weather.main.temp))}°c
             </div>
-            <div className="weather-box">
-              <div className="temp">
-                {Math.round(Number(weather.main.temp))}°c
-              </div>
-              <div style={{ display: "inline-flex", textAlign: "center" }}>
-                <div className="weather">{weather.weather[0].description}</div>
-                <div id="icon">
-                  <img
-                    height="68px"
-                    src={`http://openweathermap.org/img/w/${weather.weather[0].icon}.png`}
-                    alt="Weather icon"
-                  />
+                <div style={{ display: "inline-flex", textAlign: "center" }}>
+                  <div className="weather">{weather.weather[0].description}</div>
+                  <div id="icon">
+                    <img
+                      height="68px"
+                      src={`http://openweathermap.org/img/w/${weather.weather[0].icon}.png`}
+                      alt="Weather icon"
+                    />
+                  </div>
                 </div>
               </div>
-            </div>
-          </>
-        ) : (
-          <div>Loading...</div>
-        )}
+            </>
+          ) :
+          (
+            <>
+              {
+                (
+                  typeof weather.cod !== "undefined" && weather.cod !== "200"
+                    ?
+                    (
+                      <>Oops...{weather.message} :(</>
+                    ) :
+                    (
+                      <>Enter location to know weather condition</>
+                    )
+                )
+              }
+            </>
+          )
+        }
+
+
+
       </main>
-    </div>
+    </div >
   );
 }
 
